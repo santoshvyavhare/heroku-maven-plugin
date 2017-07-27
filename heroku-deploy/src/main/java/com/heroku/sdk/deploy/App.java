@@ -7,7 +7,6 @@ import java.io.IOException;
 import java.net.URL;
 import java.nio.file.Files;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -66,40 +65,6 @@ public class App implements Logger  {
 
   public void deploy(List<File> includedFiles, Map<String, String> configVars, URL jdkUrl, String stack, Map<String, String> processTypes, String tarFilename) throws Exception {
     deploy(includedFiles, configVars, jdkUrl.toString(), jdkUrl, stack, processTypes, tarFilename);
-  }
-
-  protected void deploySlug(List<File> includedFiles, Map<String, String> configVars, String jdkVersion, URL jdkUrl, String stack, Map<String, String> processTypes, String tarFilename) throws Exception {
-    deployer = new SlugDeployer(deployer.getClient(), getName(), getRootDir(), deployer.getTargetDir(), this);
-    deploy(includedFiles, configVars, jdkVersion, jdkUrl, stack, processTypes, tarFilename);
-  }
-
-  public void deploySlug(List<File> includedFiles, Map<String, String> configVars, String jdkVersion, String stack, Map<String, String> processTypes, String tarFilename) throws Exception {
-    deploySlug(includedFiles, configVars, jdkVersion, null, stack, processTypes, tarFilename);
-  }
-
-  public void deploySlug(List<File> includedFiles, Map<String, String> configVars, URL jdkUrl, String stack, Map<String, String> processTypes, String tarFilename) throws Exception {
-    deploySlug(includedFiles, configVars, jdkUrl.toString(), jdkUrl, stack, processTypes, tarFilename);
-  }
-
-  public void releaseSlug(String slugFilename, Map<String, String> processTypes, Map<String, String> configVars, String stack) throws Exception {
-    SlugDeployer slugDeployer = new SlugDeployer(deployer.getClient(), getName(), getRootDir(), deployer.getTargetDir(), this);
-    deployer = slugDeployer;
-    slugDeployer.releaseSlug(slugFilename, processTypes, configVars, stack);
-  }
-
-  protected void createSlug(String slugFilename, List<File> includedFiles, String jdkVersion, URL jdkUrl, String stack) throws Exception {
-    SlugDeployer slugDeployer = new SlugDeployer(deployer.getClient(), getName(), getRootDir(), deployer.getTargetDir(), this);
-    deployer = slugDeployer;
-    prepare(includedFiles, new HashMap<String, String>());
-    slugDeployer.createSlug(slugFilename, jdkVersion, jdkUrl, stack);
-  }
-
-  public void createSlug(String slugFilename, List<File> includedFiles, String jdkVersion, String stack) throws Exception {
-    createSlug(slugFilename, includedFiles, jdkVersion, null, stack);
-  }
-
-  public void createSlug(String slugFilename, List<File> includedFiles, URL jdkUrl, String stack) throws Exception {
-    createSlug(slugFilename, includedFiles, jdkUrl.toString(), jdkUrl, stack);
   }
 
   protected static File createTempDir() throws IOException {

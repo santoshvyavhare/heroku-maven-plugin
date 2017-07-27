@@ -1,6 +1,5 @@
 package com.heroku.sdk.deploy;
 
-import com.heroku.sdk.deploy.endpoints.Slug;
 import com.heroku.sdk.deploy.utils.Logger;
 import org.apache.commons.compress.archivers.ArchiveException;
 import org.apache.commons.io.FileUtils;
@@ -127,21 +126,6 @@ public abstract class Deployer {
 
   protected abstract void deploySlug(String stack, Map<String, String> processTypes, File slugFile)
       throws IOException, ArchiveException, InterruptedException;
-
-  protected void uploadSlug(Slug slug, File slugFile, Set processTypes)
-      throws IOException, ArchiveException, InterruptedException {
-    logInfo("-----> Uploading slug...");
-    slug.upload(slugFile, logger);
-    logInfo("       - stack: " + slug.getStackName());
-    logInfo("       - process types: " + processTypes);
-  }
-
-  protected void releaseSlug(Slug slug) throws IOException {
-    logInfo("-----> Releasing...");
-    Map releaseResponse = slug.release();
-    logDebug("Heroku Release response: " + releaseResponse);
-    logInfo("       - version: " + releaseResponse.get("version"));
-  }
 
   protected String getJdkVersion() {
     String defaultJdkVersion = "1.8";
