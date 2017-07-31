@@ -106,6 +106,6 @@ public class DeployWar extends WarApp {
     }
 
     (new DeployWar(appName, new File(warFile), new URL(webappRunnerUrl))).
-        deploy(includes, new HashMap<String, String>(), jdkUrl == null ? jdkVersion : jdkUrl, stack, slugFileName);
+        deploy(includes, new HashMap<String, String>(), jdkVersion, stack, slugFileName);
   }
 }

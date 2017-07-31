@@ -10,11 +10,13 @@ import org.eclipse.jgit.storage.file.FileRepositoryBuilder;
 import org.eclipse.jgit.util.Base64;
 
 import java.io.*;
-import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.*;
 import java.nio.file.attribute.BasicFileAttributes;
-import java.util.*;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Properties;
 
 public abstract class Deployer {
 
@@ -66,7 +68,7 @@ public abstract class Deployer {
     return client;
   }
 
-  protected void deploy(Map<String, String> configVars, String jdkVersion, URL jdkUrl, String stack, Map<String, String> processTypes, String slugFilename) throws Exception {
+  protected void deploy(Map<String, String> configVars, String jdkVersion, String stack, Map<String, String> processTypes, String slugFilename) throws Exception {
     try {
       mergeConfigVars(configVars);
     } catch (HttpResponseException e) {
@@ -75,7 +77,7 @@ public abstract class Deployer {
       }
       throw e;
     }
-    vendorJdk(jdkVersion, jdkUrl, stack);
+    vendorJdk(jdkVersion, stack);
     createAndReleaseSlug(stack, processTypes, slugFilename);
   }
 
@@ -112,7 +114,15 @@ public abstract class Deployer {
   }
 
   protected void mergeConfigVars(Map<String, String> configVars) throws Exception {
-    (new ConfigVars(this, getEncodedApiKey())).merge(configVars);
+    try {
+      (new ConfigVars(this, getEncodedApiKey())).merge(configVars);
+    } catch (HttpResponseException e) {
+      if (e.getStatusCode() == 404) {
+        logError("! Could not find app: " + name);
+        throw new RuntimeException("Could not find app " + name + ". Check that you have permission to access it.", e);
+      }
+      throw e;
+    }
   }
 
   protected void createAndReleaseSlug(String stack, Map<String, String> processTypes, String slugFilename)
@@ -180,7 +190,7 @@ public abstract class Deployer {
     return procTypes;
   }
 
-  protected abstract void vendorJdk(String jdkVersion, URL jdkUrl, String stackName) throws IOException, InterruptedException, ArchiveException;
+  protected abstract void vendorJdk(String jdkVersion, String stackName) throws IOException, InterruptedException, ArchiveException;
 
   protected String relativize(File path) {
     if (path.isAbsolute() && !path.getPath().startsWith(rootDir.getPath())) {

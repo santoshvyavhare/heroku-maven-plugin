@@ -44,9 +44,8 @@ public class DeployMojo extends HerokuMojo {
     }
 
     try {
-      (new MavenApp(appName, getTargetDir().getParentFile(), getTargetDir(), Arrays.asList(buildpacks), getLog(), logProgess)).deploy(
-              includedDirs, getConfigVars(), jdkUrl == null ? jdkVersion : jdkUrl, stack, processTypes, slugFilename
-      );
+      (new MavenApp(appName, getTargetDir().getParentFile(), getTargetDir(), Arrays.asList(buildpacks), getLog(), logProgess)).
+          deploy(includedDirs, getConfigVars(), jdkVersion, stack, processTypes, slugFilename);
     } catch (Exception e) {
       throw new MojoFailureException("Failed to deploy application", e);
     }

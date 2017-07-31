@@ -4,7 +4,6 @@ import com.heroku.sdk.deploy.utils.Logger;
 
 import java.io.File;
 import java.io.IOException;
-import java.net.URL;
 import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.List;
@@ -54,17 +53,9 @@ public class App implements Logger  {
     deployer.prepare(includedFiles, processTypes);
   }
 
-  protected void deploy(List<File> includedFiles, Map<String, String> configVars, String jdkVersion, URL jdkUrl, String stack, Map<String, String> processTypes, String tarFilename) throws Exception {
-    prepare(includedFiles, processTypes);
-    deployer.deploy(configVars, jdkVersion, jdkUrl, stack, processTypes, tarFilename);
-  }
-
   public void deploy(List<File> includedFiles, Map<String, String> configVars, String jdkVersion, String stack, Map<String, String> processTypes, String tarFilename) throws Exception {
-    deploy(includedFiles, configVars, jdkVersion, null, stack, processTypes, tarFilename);
-  }
-
-  public void deploy(List<File> includedFiles, Map<String, String> configVars, URL jdkUrl, String stack, Map<String, String> processTypes, String tarFilename) throws Exception {
-    deploy(includedFiles, configVars, jdkUrl.toString(), jdkUrl, stack, processTypes, tarFilename);
+    prepare(includedFiles, processTypes);
+    deployer.deploy(configVars, jdkVersion, stack, processTypes, tarFilename);
   }
 
   protected static File createTempDir() throws IOException {

@@ -9,7 +9,6 @@ import org.apache.commons.io.FileUtils;
 
 import java.io.File;
 import java.io.IOException;
-import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -60,15 +59,13 @@ public class BuildsDeployer extends Deployer {
     }
   }
 
-  protected void vendorJdk(String jdkVersion, URL jdkUrl, String stackName) throws IOException, InterruptedException, ArchiveException {
+  protected void vendorJdk(String jdkVersion, String stackName) throws IOException, InterruptedException, ArchiveException {
     String realJdkVersion = jdkVersion == null ? getJdkVersion() : jdkVersion;
     if (realJdkVersion != null) {
       Files.write(
           Paths.get(new File(getAppDir(), "system.properties").getPath()),
           ("java.runtime.version=" + realJdkVersion).getBytes(StandardCharsets.UTF_8)
       );
-    } else if (jdkUrl != null) {
-      logWarn("JDK URL is not supported with partial slug deployment! Ignoring...");
     }
   }
 

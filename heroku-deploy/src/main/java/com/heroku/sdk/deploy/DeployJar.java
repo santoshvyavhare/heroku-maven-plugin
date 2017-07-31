@@ -4,7 +4,6 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
-import java.net.URL;
 import java.util.*;
 
 /**
@@ -25,11 +24,6 @@ public class DeployJar extends App {
   public void deploy(List<File> includedFiles, Map<String,String> configVars, String jdkVersion, String stack, String slugFileName) throws Exception {
     includedFiles.add(jarFile);
     super.deploy(includedFiles, configVars, jdkVersion, stack, defaultProcTypes(), slugFileName);
-  }
-
-  public void deploy(List<File> includedFiles, Map<String,String> configVars, URL jdkUrl, String stack, String slugFileName) throws Exception {
-    includedFiles.add(jarFile);
-    super.deploy(includedFiles, configVars, jdkUrl, stack, defaultProcTypes(), slugFileName);
   }
 
   protected Map<String,String> defaultProcTypes() {
@@ -88,7 +82,6 @@ public class DeployJar extends App {
     String jarOpts = System.getProperty("heroku.jarOpts", "");
     String appName = System.getProperty("heroku.appName", null);
     String jdkVersion = System.getProperty("heroku.jdkVersion", null);
-    String jdkUrl = System.getProperty("heroku.jdkUrl", null);
     String stack = System.getProperty("heroku.stack", "cedar-14");
     List<File> includes = includesToList(System.getProperty("heroku.includes", ""));
 
@@ -102,6 +95,6 @@ public class DeployJar extends App {
     }
 
     (new DeployJar(appName, new File(jarFile), jarOpts)).
-        deploy(includes, new HashMap<String, String>(), jdkUrl == null ? jdkVersion : jdkUrl, stack, slugFileName);
+        deploy(includes, new HashMap<String, String>(), jdkVersion, stack, slugFileName);
   }
 }
