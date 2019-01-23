@@ -1,0 +1,16 @@
+{
+  "addons": [
+
+  ],
+  "buildpacks": [
+
+  ],
+  "env": {
+  },
+  "formation": {
+  },
+  "name": "heroku-maven-plugin",
+  "scripts": {
+  },
+  "stack": "heroku-18"
+}
